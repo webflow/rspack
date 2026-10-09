@@ -351,6 +351,12 @@ export declare class JsCompiler {
   close(): Promise<void>
   getVirtualFileStore(): VirtualFileStore | null
   getCompilerId(): ExternalObject<CompilerId>
+  /**
+   * Release the last compilation's heavy Rust state after Stats have been consumed.
+   *
+   * The compiler must be idle. Safe to call after `close()`. Idempotent.
+   */
+  releaseCompilation(): void
 }
 
 export declare class JsContextModuleFactoryAfterResolveData {

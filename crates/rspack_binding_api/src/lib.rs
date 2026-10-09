@@ -114,7 +114,7 @@ use napi::{CallContext, bindgen_prelude::*};
 pub use raw_options::{CustomPluginBuilder, register_custom_plugin};
 use rspack_core::{
   Compilation, CompilationId, CompilerId, CompilerPlatform, DependencyRef, EntryOptions,
-  ModuleIdentifier, PluginExt,
+  ModuleIdentifier, Plugin, PluginExt,
 };
 use rspack_error::Diagnostic;
 use rspack_fs::{IntermediateFileSystem, NativeFileSystem, ReadableFileSystem};
@@ -541,6 +541,26 @@ impl JsCompiler {
   #[napi]
   pub fn get_compiler_id(&self) -> External<CompilerId> {
     External::new(self.compiler.id())
+  }
+
+  /// Release the last compilation's heavy Rust state after Stats have been consumed.
+  ///
+  /// The compiler must be idle. Safe to call after `close()`. Idempotent.
+  #[napi]
+  pub fn release_compilation(&mut self) -> Result<()> {
+    if self.state.running() {
+      let err = concurrent_compiler_error();
+      return Err(napi::Error::new(Status::GenericFailure, err.reason));
+    }
+
+    self.cleanup_last_compilation(&self.compiler.compilation);
+    self
+      .js_hooks_plugin
+      .clear_cache(self.compiler.compilation.id());
+    ModuleObject::cleanup_by_compiler_id(&self.compiler.id());
+
+    self.compiler.release_compilation();
+    Ok(())
   }
 }
 
