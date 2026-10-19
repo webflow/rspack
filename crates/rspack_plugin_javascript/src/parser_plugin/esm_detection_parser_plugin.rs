@@ -118,10 +118,17 @@ impl<'p, 'a> JavascriptParserPlugin<'p, 'a> for ESMDetectionParserPlugin {
   fn call(
     &self,
     parser: &mut JavascriptParser<'p>,
-    _expr: &CallExpr,
+    expr: &CallExpr,
     for_name: &str,
   ) -> Option<bool> {
-    (parser.is_esm && is_non_esm_identifier(for_name)).then_some(true)
+    if parser.is_esm && is_non_esm_identifier(for_name) {
+      if for_name == "define" {
+        // Track import bindings in callbacks before skipping AMD handling.
+        parser.walk_expr_or_spread(&expr.args);
+      }
+      return Some(true);
+    }
+    None
   }
 }
 
