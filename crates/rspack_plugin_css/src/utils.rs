@@ -166,12 +166,8 @@ struct LocalIdentRenderCache {
 impl LocalIdentRenderCache {
   fn new(options: &LocalIdentOptions<'_>) -> Self {
     let output = &options.compiler_options.output;
-    let content_hash = if options
-      .local_ident_name
-      .template
-      .as_str()
-      .contains("[contenthash")
-    {
+    let template = options.local_ident_name.template.as_str();
+    let content_hash = if template.contains("[contenthash") {
       let mut hasher = RspackHasher::new(&output.hash_function);
       hasher.write(options.source.as_bytes());
       let hash = hasher.digest(&output.hash_digest);
@@ -205,21 +201,9 @@ impl LocalIdentRenderCache {
         .template
         .compiled_template()
         .expect("CSS local ident name should be a string template"),
-      has_local_placeholder: options
-        .local_ident_name
-        .template
-        .template()
-        .is_some_and(|template| template.contains("[local]")),
-      has_hash_placeholder: options
-        .local_ident_name
-        .template
-        .template()
-        .is_none_or(|template| template.contains("[hash")),
-      has_full_hash_placeholder: options
-        .local_ident_name
-        .template
-        .template()
-        .is_none_or(|template| template.contains("[fullhash")),
+      has_local_placeholder: template.contains("[local]"),
+      has_hash_placeholder: template.contains("[hash"),
+      has_full_hash_placeholder: template.contains("[fullhash"),
       file_replacements,
       content_hash,
       module_id: PathData::prepare_id(CSS_MODULE_ID_PLACEHOLDER),

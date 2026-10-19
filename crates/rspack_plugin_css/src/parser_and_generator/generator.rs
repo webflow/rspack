@@ -1,7 +1,4 @@
-use std::{
-  borrow::{Borrow, Cow},
-  cell::RefCell,
-};
+use std::borrow::{Borrow, Cow};
 
 use concat_string::concat_string;
 use once_cell::sync::OnceCell;
@@ -106,12 +103,12 @@ struct LocalIdentCache<'a> {
   module: &'a dyn Module,
   compilation: &'a Compilation,
   options: OnceCell<LocalIdentOptions<'a>>,
-  values: RefCell<HashMap<DependencyId, SmolStr>>,
+  values: HashMap<DependencyId, SmolStr>,
 }
 
 impl LocalIdentCache<'_> {
-  fn get(&self, id: DependencyId) -> SmolStr {
-    if let Some(ident) = self.values.borrow().get(&id) {
+  fn get(&mut self, id: DependencyId) -> SmolStr {
+    if let Some(ident) = self.values.get(&id) {
       return ident.clone();
     }
     let module = self.module;
@@ -137,7 +134,7 @@ impl LocalIdentCache<'_> {
       }
     };
     let ident = SmolStr::new(ident);
-    self.values.borrow_mut().insert(id, ident.clone());
+    self.values.insert(id, ident.clone());
     ident
   }
 }
@@ -452,7 +449,7 @@ impl<'a, 'g> CssModuleGenerator<'a, 'g> {
 
   fn render_css_dependencies(&mut self, css_values: &HashMap<DependencyId, Option<String>>) {
     let mut escaped_local_idents = HashMap::default();
-    let local_idents = &self.local_idents;
+    let local_idents = &mut self.local_idents;
     let mut init_fragments = ModuleInitFragments::default();
     let mut context = TemplateContext {
       compilation: self.generate_context.compilation,
