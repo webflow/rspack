@@ -1,5 +1,5 @@
 body {
-  & ._66K1xe {
+  & .gi98t- {
     color: #00f;
   }
 }

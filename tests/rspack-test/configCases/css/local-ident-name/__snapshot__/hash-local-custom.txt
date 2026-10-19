@@ -1,9 +1,9 @@
 Object {
-  btn--info_is-disabled_1: _1bf656ea5a9e461b061f-btn--info_is-disabled_1,
-  btn-info_is-disabled: _1bf656ea5a9e461b061f-btn-info_is-disabled,
-  color-red: --_1bf656ea5a9e461b061f-color-red,
+  btn--info_is-disabled_1: e426d48150b732428876-btn--info_is-disabled_1,
+  btn-info_is-disabled: e426d48150b732428876-btn-info_is-disabled,
+  color-red: --e426d48150b732428876-color-red,
   foo: bar,
-  foo_bar: _1bf656ea5a9e461b061f-foo_bar,
+  foo_bar: e426d48150b732428876-foo_bar,
   my-btn-info_is-disabled: value,
-  simple: _1bf656ea5a9e461b061f-simple,
+  simple: e426d48150b732428876-simple,
 }

@@ -1,0 +1,14 @@
+Object {
+  btn--info_is-disabled_1: rbf4bT,
+  btn-info_is-disabled: VRMqtT,
+  btnInfoIsDisabled: VRMqtT,
+  btnInfoIsDisabled1: rbf4bT,
+  class: dQaLs6,
+  default: _5EmWMM,
+  foo: bar,
+  fooBar: fa4oj_,
+  foo_bar: fa4oj_,
+  my-btn-info_is-disabled: value,
+  myBtnInfoIsDisabled: value,
+  simple: _0VMq_L,
+}

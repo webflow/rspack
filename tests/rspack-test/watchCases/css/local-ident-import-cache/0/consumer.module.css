@@ -1,0 +1,4 @@
+.composed {
+  composes: parent from "./parent.module.css";
+  padding: 1px;
+}
